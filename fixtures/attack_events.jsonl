@@ -1,0 +1,4 @@
+{"kind":"k8s_audit","ts":1,"namespace":"payments","pod":"checkout-7d9","actor":"unknown-user","verb":"create","resource":"pods","privileged":true,"host_path":true}
+{"kind":"k8s_audit","ts":2,"namespace":"payments","pod":"checkout-7d9","actor":"compromised-sa","verb":"list","resource":"secrets"}
+{"kind":"runtime","ts":3,"namespace":"payments","pod":"checkout-7d9","process":"bash","container":"checkout"}
+{"kind":"flow","ts":4,"namespace":"payments","pod":"checkout-7d9","src_ip":"10.0.1.8","dst_ip":"198.51.100.66","dst_port":443,"bytes":8192}

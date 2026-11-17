@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: incident-quarantine
+  namespace: payments
+  labels:
+    app.kubernetes.io/managed-by: eksids-reference
+spec:
+  podSelector:
+    matchLabels:
+      app: checkout
+  policyTypes:
+  - Ingress
+  - Egress

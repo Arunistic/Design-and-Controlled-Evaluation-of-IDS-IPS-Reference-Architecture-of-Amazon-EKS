@@ -1,0 +1,2 @@
+# Example only: TEST-NET documentation address, not a real IOC.
+drop ip any any -> 198.51.100.66 any (msg:"EKSIDS test indicator egress block"; sid:9000001; rev:1;)

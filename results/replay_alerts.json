@@ -1,0 +1,98 @@
+[
+  {
+    "rule_id": "K8S-001",
+    "severity": "CRITICAL",
+    "category": "privilege_escalation",
+    "message": "Workload created with privileged mode or hostPath access",
+    "namespace": "payments",
+    "pod": "checkout-7d9",
+    "actor": "unknown-user",
+    "evidence": {
+      "privileged": true,
+      "hostPath": true
+    },
+    "response": {
+      "mode": "recommendation_only",
+      "action": "review_workload_and_node_exposure"
+    }
+  },
+  {
+    "rule_id": "K8S-002",
+    "severity": "HIGH",
+    "category": "credential_access",
+    "message": "Kubernetes Secret enumeration/access observed",
+    "namespace": "payments",
+    "pod": "checkout-7d9",
+    "actor": "compromised-sa",
+    "evidence": {
+      "verb": "list"
+    },
+    "response": {
+      "mode": "recommendation_only",
+      "action": "review_rbac_and_rotate_exposed_credentials"
+    }
+  },
+  {
+    "rule_id": "RT-001",
+    "severity": "HIGH",
+    "category": "suspicious_execution",
+    "message": "Suspicious process execution: bash",
+    "namespace": "payments",
+    "pod": "checkout-7d9",
+    "actor": null,
+    "evidence": {
+      "process": "bash"
+    },
+    "response": {
+      "mode": "recommendation_only",
+      "action": "isolate_pod_after_operator_approval",
+      "network_policy": {
+        "namespace": "payments",
+        "pod": "checkout-7d9",
+        "intent": "quarantine"
+      }
+    }
+  },
+  {
+    "rule_id": "NET-002",
+    "severity": "CRITICAL",
+    "category": "command_and_control",
+    "message": "Outbound connection to configured threat-intelligence indicator",
+    "namespace": "payments",
+    "pod": "checkout-7d9",
+    "actor": null,
+    "evidence": {
+      "destination_ip": "198.51.100.66"
+    },
+    "response": {
+      "mode": "recommendation_only",
+      "action": "block_egress_and_investigate_workload",
+      "network_policy": {
+        "namespace": "payments",
+        "pod": "checkout-7d9",
+        "intent": "quarantine"
+      }
+    }
+  },
+  {
+    "rule_id": "CORR-001",
+    "severity": "CRITICAL",
+    "category": "multi_stage_compromise",
+    "message": "Suspicious process execution and known-bad egress observed from the same Pod",
+    "namespace": "payments",
+    "pod": "checkout-7d9",
+    "actor": null,
+    "evidence": {
+      "correlated_rules": [
+        "K8S-001",
+        "K8S-002",
+        "RT-001",
+        "NET-002"
+      ]
+    },
+    "response": {
+      "mode": "recommendation_only",
+      "action": "prioritize_pod_containment_and_incident_response"
+    }
+  }
+]
